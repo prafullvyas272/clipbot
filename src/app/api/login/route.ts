@@ -3,7 +3,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '../../../../lib/prisma';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+// import jwt from 'jsonwebtoken';
 
 export async function POST(request: Request) {
     try {
@@ -24,11 +24,11 @@ export async function POST(request: Request) {
       }
   
       // Optional: Generate JWT token
-      const token = jwt.sign(
-        { id: user.id, email: user.email },
-        process.env.JWT_SECRET || 'secret',
-        { expiresIn: '7d' }
-      )
+      // const token = jwt.sign(
+      //   { id: user.id, email: user.email },
+      //   process.env.JWT_SECRET || 'secret',
+      //   { expiresIn: '7d' }
+      // )
   
       return NextResponse.json({ message: 'Login successful', token }, { status: 200 })
     } catch (error) {
