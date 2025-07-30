@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       //   { expiresIn: '7d' }
       // )
   
-      return NextResponse.json({ message: 'Login successful', token }, { status: 200 })
+      return NextResponse.json({ message: 'Login successful' }, { status: 200 })
     } catch (error) {
       console.error(error)
       return NextResponse.json({ error: 'Server error' }, { status: 500 })
