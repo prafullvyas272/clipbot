@@ -21,4 +21,18 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  scripts   GeneratedScript[]  // 👈 optional reverse relation
 }
+
+model GeneratedScript {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  prompt    String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String?
+  
+  user      User?    @relation(fields: [userId], references: [id])
+}
+
