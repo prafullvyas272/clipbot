@@ -49,6 +49,12 @@ export async function POST(request: Request) {
         path: '/',
       });
   
+      // Set a cookie or session for user
+      response.cookies.set('userId', user.id, {
+        httpOnly: true,
+        path: '/',
+      });
+  
       return response;
     } catch (error) {
       console.error(error)

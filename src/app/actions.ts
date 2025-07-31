@@ -1,8 +1,9 @@
 'use server';
 
 import { GoogleGenAI } from "@google/genai";
+import { saveScriptOnDB } from "./services/ScriptService";
 
-export async function generateScript(prompt: string) {
+export async function generateScript(userId: string, prompt: string) {
   const ai = new GoogleGenAI({
     apiKey: process.env.GOOGLE_GENERATIVE_AI_API_KEY!,
   });
@@ -17,9 +18,9 @@ export async function generateScript(prompt: string) {
     },
   });
 
-  // ✅ Extract the plain text content
   const text = response.candidates?.[0]?.content?.parts?.[0]?.text || "No output";
-
-  // ✅ Return only plain serializable data
-  return JSON.parse(JSON.stringify(text));
+  const content = JSON.parse(JSON.stringify(text));
+  await saveScriptOnDB({ userId, prompt, content });
+  
+  return content;
 }

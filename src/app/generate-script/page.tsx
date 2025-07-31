@@ -21,6 +21,7 @@ import { Copy, Sparkles, Download, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner"
+import { getCookieByName } from "../services/CookieService";
 
 export default function Page() {
   const [prompt, setPrompt] = useState("");
@@ -57,7 +58,8 @@ export default function Page() {
     setLoading(true);
     setError(null);
     try {
-      const response = await generateScript(prompt); 
+      const userId = getCookieByName('userId') ?? ''
+      const response = await generateScript(userId, prompt); 
       setGeneratedContent(response || "No content generated.");
       toast.success("Your script is ready.")
     } catch (err) {

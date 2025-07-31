@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label"
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from 'next/navigation';
+import { Loader2 } from "lucide-react";
 
 export function LoginForm({
   className,
@@ -110,7 +111,7 @@ export function LoginForm({
                   <Input id="password" type="password" onChange={handleChange}  required />
                 </div>
                 <Button type="submit" className="w-full">
-                  Login
+                  {loading ? <Loader2 className="animate-spin" /> : "Login"}
                 </Button>
               </div>
               <div className="text-center text-sm">
