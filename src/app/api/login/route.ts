@@ -3,7 +3,7 @@
 import { NextResponse } from 'next/server'
 import prisma from '../../../../lib/prisma';
 import bcrypt from 'bcryptjs';
-// import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
 export async function POST(request: Request) {
     try {
@@ -24,13 +24,32 @@ export async function POST(request: Request) {
       }
   
       // Optional: Generate JWT token
-      // const token = jwt.sign(
-      //   { id: user.id, email: user.email },
-      //   process.env.JWT_SECRET || 'secret',
-      //   { expiresIn: '7d' }
-      // )
+      const token = jwt.sign(
+        { id: user.id, email: user.email },
+        process.env.JWT_SECRET || 'secret',
+        { expiresIn: '7d' }
+      )
+
+      const data =  {
+        data: {
+          access_token: token,
+          user: {
+            email: email
+          }
+        },
+        status: true,
+        message: 'User logged in successfully'
+      }
+
+      const response = NextResponse.json(data, { status: 200 });
+
+      // Set a cookie or session token (example only)
+      response.cookies.set('access_token', token, {
+        httpOnly: true,
+        path: '/',
+      });
   
-      return NextResponse.json({ message: 'Login successful' }, { status: 200 })
+      return response;
     } catch (error) {
       console.error(error)
       return NextResponse.json({ error: 'Server error' }, { status: 500 })
