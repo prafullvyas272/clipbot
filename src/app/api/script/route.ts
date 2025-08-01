@@ -1,9 +1,10 @@
 import prisma from "../../../../lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET({ userId }) {
+export async function GET(request: Request) {
   try {
-    console.log(userId)
+    const { userId } = await request.json()
+
     const scripts = await prisma.generatedScript.findMany({
       where: { userId },
       orderBy: {
