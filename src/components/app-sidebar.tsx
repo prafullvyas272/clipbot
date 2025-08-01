@@ -11,6 +11,7 @@ import {
   Map,
   FileText,
   ScrollText,
+  Speech,
   PieChart,
   Settings2,
   SquareTerminal,
@@ -84,6 +85,11 @@ const data = {
       name: "View all scripts",
       url: "/scripts",
       icon: ScrollText,
+    },
+    {
+      name: "Text to Speech",
+      url: "/text-to-speech",
+      icon: Speech,
     },
   ],
 }
