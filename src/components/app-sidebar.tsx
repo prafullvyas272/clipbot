@@ -10,6 +10,7 @@ import {
   GalleryVerticalEnd,
   Map,
   FileText,
+  ScrollText,
   PieChart,
   Settings2,
   SquareTerminal,
@@ -78,6 +79,11 @@ const data = {
       name: "Generate Script",
       url: "/generate-script",
       icon: FileText,
+    },
+    {
+      name: "View all scripts",
+      url: "/scripts",
+      icon: ScrollText,
     },
   ],
 }
