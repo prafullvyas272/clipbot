@@ -49,6 +49,10 @@ export function LoginForm({
       if (!data.status) {
         setMessage(data.error || "Login failed.");
       } else {
+        console.log(data)
+        document.cookie = `access_token=${data.data.access_token}; path=/; max-age=604800`
+        document.cookie = `userId=${data.data.user.id}; path=/; max-age=604800`
+
         router.push('/dashboard')
         setMessage("Login successfully!");
       }
