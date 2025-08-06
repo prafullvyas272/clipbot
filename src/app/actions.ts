@@ -5,6 +5,7 @@ import { saveScriptOnDB } from "./services/ScriptService";
 import { ElevenLabsClient, play } from '@elevenlabs/elevenlabs-js';
 import { generateAudioFile } from "@/utils/utils";
 import { downloadGeneratedAudio } from "@/utils/utils";
+import { saveGeneratedAudioInDB } from "./services/TextToSpeechService";
 import 'dotenv/config';
 
 export async function generateScript(userId: string, prompt: string) {
@@ -40,12 +41,10 @@ export async function generateAudio(userId: string, prompt: string) {
     outputFormat: 'mp3_44100_128',
   });
 
-  await generateAudioFile(audio);
-  return audio;
-}
-
-export async function playAudio(audio) {
-  await play(audio);
+  const generatedAudioFilePath = await generateAudioFile(audio);
+  console.log(generatedAudioFilePath)
+  const savedAudio = await saveGeneratedAudioInDB(userId, prompt, generatedAudioFilePath);
+  return savedAudio;
 }
 
 export async function downloadAudio() {

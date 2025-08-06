@@ -37,8 +37,7 @@ export default function Page() {
     try {
       const userId = getCookieByName("userId") ?? "";
       const response = await generateAudio(userId, prompt);
-      console.log(response)
-      setGeneratedSpeech(response);
+      setGeneratedSpeech(response?.audioFile);
       toast.success("Your audio is ready.");
     } catch (err) {
       if (err instanceof Error) {
@@ -52,12 +51,20 @@ export default function Page() {
   };
 
   const handleDownloadAudio = async () => {
-    return await downloadAudio();
-  }
+    const fileUrl = generatedSpeech;
+    const link = document.createElement("a");
+    link.href = fileUrl;
+    link.download = "audio.mp3";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handlePlayAudio = async () => {
-    return await playAudio(generatedSpeech);
-  }
+    const audio = new Audio(generatedSpeech);
+    audio.play().catch((err) => console.error("Audio play error:", err));
+  };
+
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -93,18 +100,18 @@ export default function Page() {
                 variant="outline"
                 onClick={handlePlayAudio}
                 size="sm"
-                disabled={loading || generatedSpeech == ''}
+                disabled={loading || generatedSpeech == ""}
               >
-                <Play/>
+                <Play />
                 Play Audio
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleDownloadAudio}
-                disabled={loading || generatedSpeech == ''}
+                disabled={loading || generatedSpeech == ""}
               >
-                <Download/>
+                <Download />
                 Download Audio
               </Button>
             </div>
@@ -114,12 +121,12 @@ export default function Page() {
             <Textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              className="flex-1 h-40 rounded-lg border border-Input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring w-full sm:w-auto"
+              className="flex-1 h-100 rounded-lg border border-Input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring w-full sm:w-auto"
               placeholder="Enter or paste your text here..."
             />
           </div>
           <Button
-            disabled={loading || prompt == ''}
+            disabled={loading || prompt == ""}
             onClick={handleGenerateAudio}
             className="h-10 px-4 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition-colors flex items-center gap-2 w-full"
           >
