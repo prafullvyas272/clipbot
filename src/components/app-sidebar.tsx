@@ -15,6 +15,7 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  AudioLines,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -82,14 +83,19 @@ const data = {
       icon: FileText,
     },
     {
-      name: "View all scripts",
+      name: "View Scripts",
       url: "/scripts",
       icon: ScrollText,
     },
     {
-      name: "Text to Speech",
+      name: "Text To Speech",
       url: "/text-to-speech",
       icon: Speech,
+    },
+    {
+      name: "View All Speech",
+      url: "/speeches",
+      icon: AudioLines,
     },
   ],
 }

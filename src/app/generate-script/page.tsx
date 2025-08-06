@@ -99,6 +99,36 @@ export default function Page() {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          {/* Scripts Grid Header */}
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-semibold">Generate Script</h2>
+            <div className="flex gap-2">
+              <Button
+                onClick={copyScript}
+                className="h-10 px-4 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition-colors flex items-center gap-2"
+                disabled={!generatedContent}
+                title="Copy generated content"
+              >
+                <Copy />
+                Copy
+              </Button>
+              <Button
+                onClick={downloadScript}
+                className="h-10 px-4 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition-colors flex items-center gap-2"
+                disabled={!generatedContent}
+                title="Download generated content"
+              >
+                <Download />
+                Download
+              </Button>
+            </div>
+          </div>
+          {/* Show generated script first */}
+          <div className="flex-1 bg-muted/50 rounded-xl p-4 min-h-[200px] overflow-auto whitespace-pre-wrap">
+            <pre className="text-muted-foreground whitespace-pre-wrap break-words">
+              {generatedContent}
+            </pre>
+          </div>
           {/* Prompt Input section */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-2 w-full">
             <Input
@@ -108,39 +138,15 @@ export default function Page() {
               className="flex-1 h-10 rounded-lg border border-Input bg-background px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-ring w-full sm:w-auto"
               placeholder="Enter your prompt here..."
             />
-            <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-              <Button
-                onClick={handleGenerateScript}
-                className="h-10 px-4 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition-colors flex items-center gap-2 w-full sm:w-auto"
-              >
-                { loading ? <Loader2 className="animate-spin" /> : <Sparkles /> }
-                { loading ? 'Generating' : 'Generate' }
-              </Button>
-              <Button
-                onClick={copyScript}
-                className="h-10 px-4 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition-colors flex items-center gap-2 w-full sm:w-auto"
-                disabled={!generatedContent}
-                title="Copy generated content"
-              >
-                <Copy />
-                Copy
-              </Button>
-              <Button
-                onClick={downloadScript}
-                className="h-10 px-4 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition-colors flex items-center gap-2 w-full sm:w-auto"
-                disabled={!generatedContent}
-                title="Download generated content"
-              >
-                <Download />
-                Download
-              </Button>
-            </div>
           </div>
-          <div className="flex-1 bg-muted/50 rounded-xl p-4 min-h-[200px] overflow-auto whitespace-pre-wrap">
-            <pre className="text-muted-foreground whitespace-pre-wrap break-words">
-              {generatedContent}
-            </pre>
-          </div>
+          <Button
+            disabled={loading || prompt == ""}
+            onClick={handleGenerateScript}
+            className="h-10 px-4 rounded-lg bg-primary text-primary-foreground font-medium shadow hover:bg-primary/90 transition-colors flex items-center gap-2 w-full"
+          >
+            {loading ? <Loader2 className="animate-spin" /> : <Sparkles />}
+            {loading ? "Generating" : "Generate"}
+          </Button>
         </div>
       </SidebarInset>
     </SidebarProvider>
