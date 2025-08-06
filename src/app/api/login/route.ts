@@ -34,7 +34,8 @@ export async function POST(request: Request) {
         data: {
           access_token: token,
           user: {
-            email: email
+            email: email,
+            id: user.id
           }
         },
         status: true,
@@ -42,18 +43,6 @@ export async function POST(request: Request) {
       }
 
       const response = NextResponse.json(data, { status: 200 });
-
-      // Set a cookie or session token (example only)
-      response.cookies.set('access_token', token, {
-        httpOnly: true,
-        path: '/',
-      });
-  
-      // Set a cookie or session for user
-      response.cookies.set('userId', user.id, {
-        httpOnly: true,
-        path: '/',
-      });
   
       return response;
     } catch (error) {
