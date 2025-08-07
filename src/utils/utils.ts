@@ -7,7 +7,7 @@ import path from "path";
  * @returns The file path where the audio was saved
  */
 export async function generateAudioFile(
-  audio: Buffer | Uint8Array | string | ReadableStream<any>
+  audio: Buffer | Uint8Array | string | ReadableStream<Uint8Array>
 ): Promise<string> {
   const dir = path.resolve(process.cwd(), "public/storage/files/usera");
   // Ensure the directory exists
