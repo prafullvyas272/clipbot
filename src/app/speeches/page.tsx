@@ -35,7 +35,7 @@ type GeneratedSpeech = {
   id: string;
   userId: string;
   text: string;
-  audiFile: string;
+  audioFile: string;
   createdAt: string;
 };
 

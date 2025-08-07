@@ -22,7 +22,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { getCookieByName } from "../services/CookieService";
 import { Textarea } from "@/components/ui/textarea";
-import { generateAudio, playAudio } from "../actions";
+import { generateAudio } from "../actions";
 import { downloadAudio } from "../actions";
 
 export default function Page() {
@@ -37,7 +37,7 @@ export default function Page() {
     try {
       const userId = getCookieByName("userId") ?? "";
       const response = await generateAudio(userId, prompt);
-      setGeneratedSpeech(response?.audioFile);
+      setGeneratedSpeech(response?.audioFile ?? '');
       toast.success("Your audio is ready.");
     } catch (err) {
       if (err instanceof Error) {
