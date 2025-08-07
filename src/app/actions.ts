@@ -35,12 +35,14 @@ export async function generateAudio(userId: string, prompt: string) {
     apiKey: process.env.ELEVENLABS_API_KEY!,
   });
 
+  // Generate audio with prompt and eleven labs client
   const audio = await elevenlabs.textToSpeech.convert('ZthjuvLPty3kTMaNKVKb', {
     text: prompt,
     modelId: 'eleven_multilingual_v2',
     outputFormat: 'mp3_44100_128',
   });
 
+  // Save the generated audio to s3
   const generatedAudioFilePath = await generateAudioFile(audio);
   console.log(generatedAudioFilePath)
   const savedAudio = await saveGeneratedAudioInDB(userId, prompt, generatedAudioFilePath);
