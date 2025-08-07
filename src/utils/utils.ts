@@ -6,7 +6,9 @@ import path from "path";
  * @param audio Buffer | Uint8Array - The audio data to save as mp3
  * @returns The file path where the audio was saved
  */
-export async function generateAudioFile(audio: Buffer | Uint8Array): Promise<string> {
+export async function generateAudioFile(
+  audio: Buffer | Uint8Array | string | ReadableStream<any>
+): Promise<string> {
   const dir = path.resolve(process.cwd(), "public/storage/files/usera");
   // Ensure the directory exists
   await fs.promises.mkdir(dir, { recursive: true });
@@ -15,8 +17,30 @@ export async function generateAudioFile(audio: Buffer | Uint8Array): Promise<str
   const filename = `audio_${Date.now()}.mp3`;
   const filePath = path.join(dir, filename);
 
+  // If audio is a ReadableStream, convert it to a Buffer first
+  let audioToWrite: Buffer | Uint8Array | string;
+  if (
+    typeof ReadableStream !== "undefined" &&
+    audio instanceof ReadableStream
+  ) {
+    // Convert ReadableStream to Buffer
+    const reader = audio.getReader();
+    const chunks: Uint8Array[] = [];
+    let done = false;
+    while (!done) {
+      const { value, done: isDone } = await reader.read();
+      if (value) {
+        chunks.push(value);
+      }
+      done = isDone;
+    }
+    audioToWrite = Buffer.concat(chunks);
+  } else {
+    audioToWrite = audio as Buffer | Uint8Array | string;
+  }
+
   // Write the audio buffer to the file
-  await fs.promises.writeFile(filePath, audio);
+  await fs.promises.writeFile(filePath, audioToWrite);
 
   return filePath;
 }
