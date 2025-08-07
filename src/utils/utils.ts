@@ -9,7 +9,16 @@ import path from "path";
 export async function generateAudioFile(
   audio: Buffer | Uint8Array | string | ReadableStream<Uint8Array>
 ): Promise<string> {
-  const dir = path.resolve(process.cwd(), "public/storage/files/usera");
+
+  let dir: string;
+  if (process.env.APP_ENVIRONMENT !== "local") {
+    // Run this code for vercel prod
+    dir = path.resolve("/tmp/files/usera");
+  } else {
+    // Run this code for local
+    dir = path.resolve(process.cwd(), "public/storage/files/usera");
+  }
+  
   // Ensure the directory exists
   await fs.promises.mkdir(dir, { recursive: true });
 
