@@ -1,33 +1,23 @@
 import fs from "fs";
 import path from "path";
+import formidable from "formidable";
+import { uploadToS3 } from "@/app/services/AWSService";
 
-/**
- * Saves the provided audio buffer as an mp3 file in storage/files/usera/
- * @param audio Buffer | Uint8Array - The audio data to save as mp3
- * @returns The file path where the audio was saved
- */
+// Disable Next.js built-in body parser
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 export async function generateAudioFile(
   audio: Buffer | Uint8Array | string | ReadableStream<Uint8Array>
 ): Promise<string> {
-
-  let dir: string;
-  if (process.env.APP_ENVIRONMENT !== "local") {
-    // Run this code for vercel prod
-    dir = path.resolve("/tmp/files/usera");
-  } else {
-    // Run this code for local
-    dir = path.resolve(process.cwd(), "public/storage/files/usera");
-  }
-  
-  // Ensure the directory exists
-  await fs.promises.mkdir(dir, { recursive: true });
-
   // Generate a unique filename
   const filename = `audio_${Date.now()}.mp3`;
-  const filePath = path.join(dir, filename);
 
   // If audio is a ReadableStream, convert it to a Buffer first
-  let audioToWrite: Buffer | Uint8Array | string;
+  let audioToUpload: Buffer | Uint8Array | string;
   if (
     typeof ReadableStream !== "undefined" &&
     audio instanceof ReadableStream
@@ -43,15 +33,19 @@ export async function generateAudioFile(
       }
       done = isDone;
     }
-    audioToWrite = Buffer.concat(chunks);
+    audioToUpload = Buffer.concat(chunks);
   } else {
-    audioToWrite = audio as Buffer | Uint8Array | string;
+    audioToUpload = audio as Buffer | Uint8Array | string;
   }
 
-  // Write the audio buffer to the file
-  await fs.promises.writeFile(filePath, audioToWrite);
+  // Upload the audio buffer to S3
+  const s3Url = await uploadToS3({
+    fileBuffer: audioToUpload,
+    fileName: filename,
+    contentType: "audio/mpeg",
+  });
 
-  return filePath;
+  return s3Url;
 }
 
 
