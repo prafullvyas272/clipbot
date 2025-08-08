@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { TransparentNavbar } from "@/components/header";
 import AnimatedText from "@/animation/AnimatedText";
+import Blog from "@/components/hero/Blog";
 
 export default function Home() {
   const features = [
@@ -58,10 +59,10 @@ export default function Home() {
       <section className="mt-20 flex-1 flex flex-col items-center justify-center px-4">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Hero Heading */}
-          <AnimatedText
+          {/* <AnimatedText
             className="text-4xl md:text-5xl font-bold mb-4"
             text="The Ultimate Solution for your Modern Problems"
-          />
+          /> */}
           {/* 3 Column Features */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
             {features.map((feature) => (
@@ -78,6 +79,9 @@ export default function Home() {
             ))}
           </div>
         </div>
+      </section>
+      <section>
+        <Blog/>
       </section>
     </main>
   );
