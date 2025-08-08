@@ -12,6 +12,7 @@ import Blog from "@/components/hero/Blog";
 import Contact from "@/components/hero/Contact";
 import Features from "@/components/hero/Features";
 import Pricing from "@/components/hero/Pricing";
+import Footer from "@/components/hero/Footer";
 
 export default function Home() {
   const features = [
@@ -51,7 +52,7 @@ export default function Home() {
           </p>
           <div className="flex items-center justify-center space-x-2">
             <a
-              href="#"
+              href="register"
               className="px-4 py-2 rounded-md bg-purple-600 text-white font-medium hover:bg-purple-700 transition-colors"
             >
               Get Started
@@ -94,6 +95,9 @@ export default function Home() {
       </section>
       <section>
         <Pricing/>
+      </section>
+      <section>
+        <Footer/>
       </section>
     </main>
   );
