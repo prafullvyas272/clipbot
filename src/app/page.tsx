@@ -9,6 +9,7 @@ import {
 import { TransparentNavbar } from "@/components/header";
 import AnimatedText from "@/animation/AnimatedText";
 import Blog from "@/components/hero/Blog";
+import Contact from "@/components/hero/Contact";
 
 export default function Home() {
   const features = [
@@ -82,6 +83,9 @@ export default function Home() {
       </section>
       <section>
         <Blog/>
+      </section>
+      <section>
+        <Contact/>
       </section>
     </main>
   );
