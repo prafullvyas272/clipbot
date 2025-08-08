@@ -12,6 +12,7 @@ import Blog from "@/components/hero/Blog";
 import Contact from "@/components/hero/Contact";
 import Features from "@/components/hero/Features";
 import Pricing from "@/components/hero/Pricing";
+import Footer from "@/components/hero/Footer";
 
 export default function Home() {
   const features = [
@@ -94,6 +95,9 @@ export default function Home() {
       </section>
       <section>
         <Pricing/>
+      </section>
+      <section>
+        <Footer/>
       </section>
     </main>
   );
