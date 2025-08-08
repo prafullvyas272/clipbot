@@ -11,6 +11,7 @@ import AnimatedText from "@/animation/AnimatedText";
 import Blog from "@/components/hero/Blog";
 import Contact from "@/components/hero/Contact";
 import Features from "@/components/hero/Features";
+import Pricing from "@/components/hero/Pricing";
 
 export default function Home() {
   const features = [
@@ -90,6 +91,9 @@ export default function Home() {
       </section>
       <section>
         <Features/>
+      </section>
+      <section>
+        <Pricing/>
       </section>
     </main>
   );
