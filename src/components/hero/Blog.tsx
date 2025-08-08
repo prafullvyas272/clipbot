@@ -77,7 +77,7 @@ export default function Blog() {
   ];
 
   return (
-    <main className="min-h-screen flex flex-col bg-gradient-to-b from-black to-gray-900 text-white">
+    <main className="min-h-screen flex flex-col bg-gradient-to-b from-black to-gray-900 text-white mb-10">
       <section className="mt-20 flex-1 flex flex-col items-center justify-center px-4">
         <div className="w-full max-w-2xl mx-auto text-center mt-24">
           <AnimatedText
