@@ -9,12 +9,11 @@ import { Button, type ButtonProps } from "../../ui/button";
 import Glow from "../../ui/glow";
 import { Mockup, MockupFrame } from "../../ui/mockup";
 import Screenshot from "../../ui/screenshot";
-import { Section } from "../../ui/section";
 
 interface HeroButtonProps {
   href: string;
   text: string;
-  variant?: ButtonProps["variant"];
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
   icon?: ReactNode;
   iconRight?: ReactNode;
 }
@@ -61,14 +60,14 @@ export default function Hero({
     {
       href: "https://www.launchuicomponents.com/",
       text: "Github",
-      variant: "glow",
+      variant: "outline",
       icon: <Github className="mr-2 size-4" />,
     },
   ],
   className,
 }: HeroProps) {
   return (
-    <Section
+    <div
       className={cn(
         "fade-bottom overflow-hidden pb-0 sm:pb-0 md:pb-0",
         className,
@@ -122,6 +121,6 @@ export default function Hero({
           )}
         </div>
       </div>
-    </Section>
+    </div>
   );
 }
