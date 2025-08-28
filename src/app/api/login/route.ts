@@ -30,6 +30,8 @@ export async function POST(request: Request) {
         { expiresIn: '7d' }
       )
 
+      console.log('token')
+
       const data =  {
         data: {
           access_token: token,
