@@ -1,4 +1,6 @@
 import { NextAuthOptions } from "next-auth";
+import type { JWT } from "next-auth/jwt";
+import type { Session } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import { saveUserToDB } from "@/utils/user-utils";
@@ -6,6 +8,12 @@ import { saveUserToDB } from "@/utils/user-utils";
 export type ProfileType = {
     id?: string,
     sub?: string,
+}
+
+export type ExtendedToken = JWT & {
+  accessToken?: string;
+  provider?: string;
+  id?: string;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -40,20 +48,21 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
 
-    async jwt({ token, account, profile }: { token: any, account?: any, profile?: ProfileType }) {
-      if (account) {
-        token.accessToken = account.access_token;
-        token.provider = account.provider;
+    async jwt({ token, account, profile }: { token: ExtendedToken, account?: unknown, profile?: ProfileType }) {
+      if (account && typeof account === 'object') {
+        const accountObj = account as Record<string, unknown>;
+        token.accessToken = accountObj.access_token as string;
+        token.provider = accountObj.provider as string;
         token.id = profile?.sub || profile?.id;
       }
       return token;
     },
 
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session, token: ExtendedToken }) {
       if (token && session.user) {
-        (session.user as any).id = token.id as string;
-        (session.user as any).accessToken = token.accessToken as string;
-        (session.user as any).provider = token.provider as string;
+        (session.user as Record<string, unknown>).id = token.id as string;
+        (session.user as Record<string, unknown>).accessToken = token.accessToken as string;
+        (session.user as Record<string, unknown>).provider = token.provider as string;
       }
       return session;
     },
