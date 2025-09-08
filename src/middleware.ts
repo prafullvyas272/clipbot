@@ -6,16 +6,14 @@ import jwt from "jsonwebtoken";
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // 🚫 Skip auth checks for NextAuth routes and static files
-  if (pathname.startsWith("/api/auth") || pathname.startsWith("/_next") || pathname.startsWith("/static")) {
+  // 🚫 Skip middleware for API routes & static files
+  if (pathname.startsWith("/api/") || pathname.startsWith("/_next") || pathname.startsWith("/static")) {
     return NextResponse.next();
   }
 
-  // ✅ Define public routes
+  // ✅ Public routes
   const publicRoutes = ["/", "/login", "/register"];
-  const isPublic = publicRoutes.includes(pathname);
-
-  if (isPublic) {
+  if (publicRoutes.includes(pathname)) {
     return NextResponse.next();
   }
 
@@ -37,9 +35,7 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // next-auth.callback-url, next-auth.csrf-token, next-auth.session-token
-
-  // 🚫 If no session and not already on login → redirect
+  // 🚫 If no session & not already on login → redirect
   if (!token && !pathname.startsWith("/login")) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
