@@ -70,13 +70,13 @@ export function RegisterForm({
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
           <CardDescription>
-            Register with your Apple or Google account
+            {/* Register with your Apple or Google account */}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="grid gap-6">
-              <div className="flex flex-col gap-4">
+              {/* <div className="flex flex-col gap-4">
                 <Button
                   variant="outline"
                   className="w-full"
@@ -96,7 +96,7 @@ export function RegisterForm({
                 <span className="bg-card text-muted-foreground relative z-10 px-2">
                   Or continue with
                 </span>
-              </div>
+              </div> */}
               <div className="grid gap-6">
                 <div className="grid gap-3">
                   <Label htmlFor="name">Name</Label>

@@ -25,15 +25,21 @@ export async function middleware(req: NextRequest) {
 
   // ✅ Or check custom JWT cookie
   const accessToken = req.cookies.get("access_token")?.value;
-  if (accessToken) {
-    try {
-      jwt.verify(accessToken, process.env.JWT_SECRET || "secret");
-      return NextResponse.next();
-    } catch (err) {
-      console.error("JWT verification failed:", err);
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
+  // if (accessToken) {
+  //   try {
+  //     jwt.verify(accessToken, process.env.JWT_SECRET || "secret");
+  //     return NextResponse.next();
+  //   } catch (err) {
+  //     console.error("JWT verification failed:", err);
+  //     return NextResponse.redirect(new URL("/login", req.url));
+  //   }
+  // }
+
+  if (!accessToken) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
+
+  return NextResponse.next();
 
   // 🚫 If no session & not already on login → redirect
   if (!token && !pathname.startsWith("/login")) {

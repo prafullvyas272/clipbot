@@ -163,25 +163,7 @@ export default function Page() {
                     >
                         <Play/>
                       Play
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        if (speech.audioFile) {
-                          const link = document.createElement("a");
-                          link.href = speech.audioFile;
-                          link.download = "audio.mp3";
-                          document.body.appendChild(link);
-                          link.click();
-                          document.body.removeChild(link);
-                        }
-                      }}
-                      disabled={!speech.audioFile}
-                    >
-                        <Download/>
-                      Download
-                    </Button>
+                    </Button>                    
                   </TableCell>
                 </TableRow>
               ))
