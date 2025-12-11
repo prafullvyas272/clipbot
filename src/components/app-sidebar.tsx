@@ -77,7 +77,13 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [user, setUser] = useState(null);
+  type User = {
+    name: string;
+    email: string;
+    avatar?: string;
+  };
+
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const userId = getCookie("userId");
@@ -106,9 +112,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           user={
             user
               ? {
-                  name: user.name,
-                  email: user.email,
-                  avatar: user.avatar || "/avatars/default.png",
+                  name: user?.name,
+                  email: user?.email,
+                  avatar: user?.avatar || "/avatars/default.png",
                 }
               : {
                   name: "Loading...",
