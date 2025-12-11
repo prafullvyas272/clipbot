@@ -177,7 +177,7 @@ export function LoginForm({
                 </Button>
 
                 {/* Divider */}
-                <div className="relative">
+                {/* <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-700"></div>
                   </div>
@@ -186,10 +186,10 @@ export function LoginForm({
                       Or continue with
                     </span>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Social Login Buttons */}
-                <div className="grid grid-cols-2 gap-4">
+                {/* <div className="grid grid-cols-2 gap-4">
                   <Button
                     variant="outline"
                     type="button"
@@ -239,7 +239,7 @@ export function LoginForm({
                       </>
                     )}
                   </Button>
-                </div>
+                </div> */}
 
                 {/* Register Link */}
                 <div className="text-center">

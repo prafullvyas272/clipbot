@@ -170,7 +170,7 @@ export function RegisterForm({
                   {loading ? "Registering..." : "Register"}
                 </Button>
                 {/* Divider */}
-                <div className="relative">
+                {/* <div className="relative">
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-gray-700"></div>
                   </div>
@@ -179,9 +179,9 @@ export function RegisterForm({
                       Or continue with
                     </span>
                   </div>
-                </div>
+                </div> */}
                 {/* Social Login Buttons - disabled/placeholder */}
-                <div className="grid grid-cols-2 gap-4">
+                {/* <div className="grid grid-cols-2 gap-4">
                   <Button
                     variant="outline"
                     type="button"
@@ -216,7 +216,7 @@ export function RegisterForm({
                     </svg>
                     GitHub
                   </Button>
-                </div>
+                </div> */}
                 {/* Login Link */}
                 <div className="text-center">
                   <p className="text-sm text-gray-400">

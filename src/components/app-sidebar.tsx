@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   AudioWaveform,
   BookOpen,
@@ -16,30 +16,28 @@ import {
   Settings2,
   SquareTerminal,
   AudioLines,
-} from "lucide-react"
+} from "lucide-react";
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavMain } from "@/components/nav-main";
+import { NavProjects } from "@/components/nav-projects";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
-// This is sample data.
+import { useEffect, useState } from "react";
+import { getCookie } from "cookies-next";
+
+// Sample static data (projects, teams)
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   teams: [
     {
-      name: "Acme Inc",
+      name: "ClipBot",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     },
@@ -52,28 +50,6 @@ const data = {
       name: "Evil Corp.",
       logo: Command,
       plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
     },
   ],
   projects: [
@@ -98,22 +74,52 @@ const data = {
       icon: AudioLines,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const userId = getCookie("userId");
+    if (!userId) return;
+
+    fetch("/api/user", {
+      headers: { "x-user-id": userId.toString() },
+    })
+      .then((res) => res.json())
+      .then((data) => setUser(data.user));
+  }, []);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
+
       <SidebarContent>
         <NavProjects projects={data.projects} />
         {/* <NavMain items={data.navMain} /> */}
       </SidebarContent>
+
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser
+          user={
+            user
+              ? {
+                  name: user.name,
+                  email: user.email,
+                  avatar: user.avatar || "/avatars/default.png",
+                }
+              : {
+                  name: "Loading...",
+                  email: "",
+                  avatar: "/avatars/default.png",
+                }
+          }
+        />
       </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

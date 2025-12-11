@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { getCookieByName } from "../services/CookieService";
 import axios from "axios";
+import Loader from "@/components/ui/loader";
 
 type Script = {
   id: string;
@@ -109,7 +110,7 @@ export default function Page() {
           <div className="flex-1 bg-muted/50 rounded-xl p-4 min-h-[200px] overflow-auto">
             {loading ? (
               <div className="flex justify-center items-center h-32">
-                <span className="animate-spin mr-2">⏳</span> Loading scripts...
+                <Loader/>
               </div>
             ) : paginatedScripts.length === 0 ? (
               <div className="text-muted-foreground text-center py-8">
