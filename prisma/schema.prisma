@@ -27,6 +27,7 @@ model User {
 
   scripts         GeneratedScript[] // 👈 optional reverse relation
   GeneratedSpeech GeneratedSpeech[]
+  videos          Video[] // 👈 Added reverse relation for Video
 }
 
 model GeneratedScript {
@@ -49,4 +50,21 @@ model GeneratedSpeech {
   userId    String?
 
   user User? @relation(fields: [userId], references: [id])
+}
+
+
+model Video {
+    id        String   @id @default(auto()) @map("_id") @db.ObjectId
+    title     String?
+    thumbnail String?
+    videoFile String?
+    size      Float?
+    duration  Float?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    userId    String?
+    isArchived Boolean @default(false)
+    isDeleted  Boolean @default(false)
+
+    user User? @relation(fields: [userId], references: [id])
 }
