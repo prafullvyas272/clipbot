@@ -16,6 +16,10 @@ import {
   Settings2,
   SquareTerminal,
   AudioLines,
+  Video,
+  Camera,
+  VideoIcon,
+  ListVideo,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -72,6 +76,16 @@ const data = {
       name: "View All Speech",
       url: "/speeches",
       icon: AudioLines,
+    },
+    {
+      name: "Generate Video",
+      url: "/generate-video",
+      icon: ListVideo,
+    },
+    {
+      name: "Video Library",
+      url: "/video-library",
+      icon: Video,
     },
   ],
 };

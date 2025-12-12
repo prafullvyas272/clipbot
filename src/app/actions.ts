@@ -7,6 +7,10 @@ import { generateAudioFile } from "@/utils/utils";
 import { downloadGeneratedAudio } from "@/utils/utils";
 import { saveGeneratedAudioInDB } from "./services/TextToSpeechService";
 import 'dotenv/config';
+import RunwayML, { TaskFailedError } from "@runwayml/sdk";
+import { saveVideoOnDB } from "./services/RunwayMLService";
+
+
 
 export async function generateScript(userId: string, prompt: string) {
   const ai = new GoogleGenAI({
@@ -53,3 +57,42 @@ export async function downloadAudio() {
   return await downloadGeneratedAudio();
 }
 
+const client = new RunwayML({
+  apiKey: process.env.RUNWAYML_API_SECRET,
+});
+
+export async function generateVideo(userId: string, prompt: string) {
+    
+  // Create a new image-to-video task using the "gen4_turbo" model
+  try {
+    // TODO need to uncomment when we have credits
+    // const video = await client.textToVideo
+    //   .create({
+    //     model: "veo3.1",
+    //     promptText: prompt,
+    //     ratio: "1280:720",
+    //     duration: 4, // Allowed values: 4, 6, or 8
+    //   })
+    //   .waitForTaskOutput();
+
+    const video = {
+      videoFile: 'testVideoFileUrl',
+      size: 10.2,
+      duration: 4,
+      thumbnail: 'testingThumbnail',
+    }
+    
+    console.log("Video Generation complete:", video);
+    const savedVideo = await saveVideoOnDB({userId, prompt, video});
+    console.log("Video Saved on DB and AWS complete" , savedVideo);
+
+    return savedVideo;
+  } catch (error) {
+    if (error instanceof TaskFailedError) {
+      console.error("The video failed to generate.");
+      console.error(error.taskDetails);
+    } else {
+      console.error(error);
+    }
+  }
+}
