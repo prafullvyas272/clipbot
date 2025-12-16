@@ -14,20 +14,21 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String   @unique
-  phone     String?  @unique
-  image     String?
-  password  String
-  provider  String?
-  providerAccountId String?  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  email             String   @unique
+  phone             String?  @unique
+  image             String?
+  password          String
+  provider          String?
+  providerAccountId String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  scripts         GeneratedScript[] // 👈 optional reverse relation
-  GeneratedSpeech GeneratedSpeech[]
-  videos          Video[] // 👈 Added reverse relation for Video
+  scripts           GeneratedScript[] // 👈 optional reverse relation
+  GeneratedSpeech   GeneratedSpeech[]
+  videos            Video[] // 👈 Added reverse relation for Video
+  userSubscriptions UserSubsscription[]
 }
 
 model GeneratedScript {
@@ -52,19 +53,78 @@ model GeneratedSpeech {
   user User? @relation(fields: [userId], references: [id])
 }
 
-
 model Video {
-    id        String   @id @default(auto()) @map("_id") @db.ObjectId
-    title     String?
-    thumbnail String?
-    videoFile String?
-    size      Float?
-    duration  Float?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    userId    String?
-    isArchived Boolean @default(false)
-    isDeleted  Boolean @default(false)
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  title      String?
+  thumbnail  String?
+  videoFile  String?
+  size       Float?
+  duration   Float?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  userId     String?
+  isArchived Boolean  @default(false)
+  isDeleted  Boolean  @default(false)
 
-    user User? @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id])
+}
+
+enum StripeProductType {
+  RECURRING
+  ONE_OFF
+}
+
+enum BillingPeriod {
+  day
+  month
+  week
+  year
+}
+
+model StripeProduct {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  productId   String  @unique
+  name        String?
+  description String?
+  image       String?
+
+  active    Boolean  @default(true)
+  metadata  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  prices StripePrice[]
+
+  UserSubsscription UserSubsscription[]
+}
+
+model StripePrice {
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
+  priceId       String            @unique
+  productId     String
+  amount        Float             @default(0.0)
+  currency      String            @default("INR")
+  recurring     Json?
+  type          StripeProductType
+  billingPeriod BillingPeriod?
+  active        Boolean           @default(true)
+
+  product           StripeProduct       @relation(fields: [productId], references: [id])
+  UserSubsscription UserSubsscription[]
+}
+
+model UserSubsscription {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  userId          String
+  stripeProductId String
+  stripePriceId   String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  expiresAt DateTime
+
+  // relations
+  user          User          @relation(fields: [userId], references: [id])
+  stripeProduct StripeProduct @relation(fields: [stripeProductId], references: [id])
+  stripePrice   StripePrice   @relation(fields: [stripePriceId], references: [id])
 }
