@@ -57,40 +57,55 @@ const storeStripeProductsInDB = async (
         });
       }
     }
-    await processStripePrices(productsData);
+
+    const stripeProducts = await prisma.stripeProduct.findMany();
+    await processStripePrices(stripeProducts);
   } catch (error) {
     console.error("DB sync error:", error);
   }
 };
 
-const processStripePrices = async (productsData: StripeProductWithPrice[]) => {
+
+const processStripePrices = async (stripeProducts) => {
   try {
-    for (let index = 0; index < productsData.length; index++) {
-      const productId = productsData[index].id;
+    // Fetch ALL prices once
+    const pricesResponse = await stripe.prices.list({
+      limit: 100, // increase if needed
+    });
 
-      // fetch prices by productId from stripe
-      const prices = await stripe.prices.list({limit: 10})
+    for (const product of stripeProducts) {
+      const productDbId = product.id; // Mongo ObjectId
+      const stripeProductId = product.productId; // prod_xxx
 
-      for (const price of prices.data) {
+      // Filter prices belonging to THIS Stripe product
+      const filteredPricesData = pricesResponse.data.filter(
+        (pr) => pr.product === stripeProductId
+      );
+
+      for (const price of filteredPricesData) {
         const priceExist = await prisma.stripePrice.findFirst({
           where: {
-            priceId: price.id
-          }
-        })
+            priceId: price.id,
+          },
+        });
 
         const payload = {
           priceId: price.id,
-          productId: productId,
-          amount: typeof price.unit_amount === 'number' ? price.unit_amount : 0.00,
-          currency: price.currency,
-          recurring: price.recurring ? (price.recurring as unknown as Prisma.InputJsonValue) : null,
-          type: price.type === 'recurring' ? 'RECURRING' : 'ONE_OFF',
-          billingPeriod: price?.recurring?.interval ?? null,
+          productId: productDbId, // ✅ correct Mongo relation
+          amount:
+            typeof price.unit_amount === "number"
+              ? price.unit_amount
+              : 0.0,
+          currency: price.currency.toUpperCase(),
+          recurring: price.recurring
+            ? (price.recurring as unknown as Prisma.InputJsonValue)
+            : null,
+          type: price.type === "recurring" ? "RECURRING" : "ONE_OFF",
+          billingPeriod: price.recurring?.interval ?? null,
           active: price.active,
         };
 
         if (priceExist) {
-          // code to update price
           await prisma.stripePrice.update({
             where: {
               id: priceExist.id,
@@ -98,19 +113,19 @@ const processStripePrices = async (productsData: StripeProductWithPrice[]) => {
             data: payload,
           });
         } else {
-          // code to create price
           await prisma.stripePrice.create({
-            data: payload
+            data: payload,
           });
-        }       
+        }
       }
-      return;
     }
 
+    console.log("Stripe prices synced successfully");
   } catch (error) {
-    console.error(error)
+    console.error("Stripe price sync failed:", error);
   }
-}
+};
+
 
 const syncStripeProductsToDB = async (): Promise<void> => {
   console.log("Stripe Products Syncing Started ..............");
