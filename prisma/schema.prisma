@@ -83,7 +83,7 @@ enum BillingPeriod {
 
 model StripeProduct {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  productId   String  @unique
+  productId   String  @unique     // stripe real product id prod______xxx
   name        String?
   description String?
   image       String?
@@ -100,8 +100,8 @@ model StripeProduct {
 
 model StripePrice {
   id            String            @id @default(auto()) @map("_id") @db.ObjectId
-  priceId       String            @unique
-  productId     String
+  priceId       String            @unique     // Stripe real price id price______xx
+  productId     String            @db.ObjectId    // db id for relation
   amount        Float             @default(0.0)
   currency      String            @default("INR")
   recurring     Json?
